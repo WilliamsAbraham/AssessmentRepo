@@ -6,6 +6,7 @@ using CustomerServiceApi.Core.Application.Response;
 using HobaxHrApi.Host.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using System.Diagnostics.Contracts;
 
 namespace CustomerServiceApi.Controllers
@@ -68,6 +69,7 @@ namespace CustomerServiceApi.Controllers
         } 
         
          [HttpGet("all-byPage")]
+        [EnableRateLimiting("fixed")]
         public async Task<ActionResult<ApiResponse<List<CustomerDetails>>>> GetAllCustomersByPage(int page, int pageSize, CancellationToken cancellationToken)
         {
             return await HandleApiOperationAsync(async () =>
@@ -76,8 +78,8 @@ namespace CustomerServiceApi.Controllers
 
                 return ApiResponseFactory.CreateSuccessResponse(response);
             });
-        }  
-        
+        }
+        [EnableRateLimiting("ip-based")]
         [HttpGet("getStates")]
         public ActionResult<ApiResponse<List<StateDto>>> GetStats()
         {

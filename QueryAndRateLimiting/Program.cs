@@ -4,10 +4,12 @@ using CustomerServiceApi.Infrastructure.Implementation;
 using CustomerServiceApi.Infrastructure.Persistence;
 using CustomerServiceApi.Infrastructure.Utilities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Serilog;
+using System.Threading.RateLimiting;
 
 
 Log.Logger = new LoggerConfiguration()
@@ -24,6 +26,28 @@ try
         loggerConfiguration.WriteTo.Console();
         loggerConfiguration.ReadFrom.Configuration(context.Configuration);
     });
+
+    builder.Services.AddRateLimiter(options =>
+    {
+        options.AddFixedWindowLimiter("fixed", limiterOptions =>
+        {
+            limiterOptions.PermitLimit = 5; // Max 5 requests
+            limiterOptions.Window = TimeSpan.FromSeconds(10); // Per 10 seconds
+            limiterOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+            limiterOptions.QueueLimit = 2; // Allow 2 extra requests in queue
+        });
+
+        options.AddPolicy("ip-based", httpContext =>
+        {
+            var ipAddress = httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            return RateLimitPartition.GetFixedWindowLimiter(ipAddress, RateLimiterOptions => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 10, // Max 10 requests
+                Window = TimeSpan.FromSeconds(60) // Per minute
+            });
+        });
+    });
+
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
@@ -61,8 +85,6 @@ try
 
     builder.Services.AddAuthentication();
     builder.Services.AddAuthorization();
-
-    builder.AddServiceDefaults();
  
     var app = builder.Build();
 
