@@ -65,7 +65,19 @@ namespace CustomerServiceApi.Controllers
 
                 return ApiResponseFactory.CreateSuccessResponse(response);
             });
-        }   
+        } 
+        
+         [HttpGet("all-byPage")]
+        public async Task<ActionResult<ApiResponse<List<CustomerDetails>>>> GetAllCustomersByPage(int page, int pageSize, CancellationToken cancellationToken)
+        {
+            return await HandleApiOperationAsync(async () =>
+            {
+                var response = await _customerService.GetListAsync(page,pageSize,cancellationToken);
+
+                return ApiResponseFactory.CreateSuccessResponse(response);
+            });
+        }  
+        
         [HttpGet("getStates")]
         public ActionResult<ApiResponse<List<StateDto>>> GetStats()
         {

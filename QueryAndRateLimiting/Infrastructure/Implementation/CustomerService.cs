@@ -103,6 +103,24 @@ namespace CustomerServiceApi.Infrastructure.Implementation
             }).ToList();
         }
 
+        public async Task<List<CustomerDetails>> GetListAsync(int page, int pageSize, CancellationToken cancellationToken)
+        {
+            return await _userManager.Users
+                .AsNoTracking()
+                .OrderBy(u => u.Id) // Ensure consistent ordering
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(s => new CustomerDetails
+                {
+                    Id = s.Id,
+                    Email = s.Email ?? string.Empty,
+                    PhoneNumber = s.PhoneNumber ?? string.Empty,
+                    StateOfResidence = s.StateOfResidence,
+                    LGA = s.LGA ?? string.Empty,
+                })
+                .ToListAsync(cancellationToken);
+        }
+
         public async Task<string> VerifyCustomer(string phone, string otp)
         {
             string response = string.Empty;

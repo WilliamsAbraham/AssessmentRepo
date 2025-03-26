@@ -9,5 +9,6 @@ namespace CustomerServiceApi.Core.Application.Interfaces
         Task<string> CreateCustomerAsync(CreateCustomerDto request);
         Task<string> VerifyCustomer(string phone, string otp);
         Task<List<CustomerDetails>> GetListAsync(CancellationToken cancellationToken);
+        Task<List<CustomerDetails>> GetListAsync(int page, int pageSize, CancellationToken cancellationToken);
     }
 }
