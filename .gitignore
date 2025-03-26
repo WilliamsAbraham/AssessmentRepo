@@ -1,0 +1,19 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/Assessment/.vs/Assessment/v17
+/Assessment/.vs/ProjectEvaluation
+/Assessment/.vs/WemaAssessment/CopilotIndices/0.2.1657.32929
+/Assessment/.vs/WemaAssessment/DesignTimeBuild
+/Assessment/.vs/WemaAssessment/FileContentIndex
+/Assessment/Api.Banks/bin/Debug/net8.0
+/Assessment/Api.Banks/obj/Debug/net8.0
+/Assessment/ApiGateWay/bin/Debug/net8.0
+/Assessment/ApiGateWay/obj
+/Assessment/Assessment.AppHost/bin/Debug/net8.0
+/Assessment/Assessment.AppHost/obj/Debug/net8.0/ref
+/Assessment/Assessment.AppHost/obj/Debug/net8.0/refint
+/Assessment/Assessment.AppHost/obj
+/Assessment/Assessment.ServiceDefaults/obj
+/Assessment/CustomerServiceApi/bin/Debug/net8.0
