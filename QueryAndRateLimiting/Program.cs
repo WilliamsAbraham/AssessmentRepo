@@ -95,10 +95,7 @@ try
     }
     app.UseSwagger();
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/customer/swagger/v1/swagger.json", "Customer API V1");
-    });
+    app.UseSwaggerUI();
 
     //app.UseHttpsRedirection();
 
